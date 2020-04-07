@@ -71,19 +71,27 @@ textarea {
   border-radius: 25%;
   cursor: pointer;
 
-  transition: border-width, border-color, background-color 0.5s linear;
+  transition: border-width, border-color, background-color, 0.5s linear;
 }
 
 .keyboard li:hover {
   border-width: 4px;
+  border-color: orange;
 }
 
 .keyboard li.pressed {
-  animation: press 1s ease forwards;
+  border-width: 4px;
+
+  animation: press 0.5s ease forwards;
 }
 
 @keyframes press {
-  to {
+  50% {
+    border-width: 2px;
+    border-color: green;
+  }
+
+  100% {
     border-width: 4px;
     border-color: yellow;
   }

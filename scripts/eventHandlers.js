@@ -1,70 +1,4 @@
-export const addEventListenersForVirtualKeyboard = (keyboard, textArea, keyMap, langStorage) => {
-  keyboard.addEventListener('click', function (e) {
-    let pressedKey;
-    if (e.target.tagName === 'LI') {
-      pressedKey = e.target;
-    } else if (e.target.parentNode.tagName == 'LI') {
-      pressedKey = e.target.parentNode;
-    }
-    processPressedKey(pressedKey, textArea, keyboard, langStorage, e);
-  });
-
-  keyboard.addEventListener('mousedown', function (e) {
-    let pressedKey;
-    if (e.target.tagName === 'LI') {
-      pressedKey = e.target;
-    } else if (e.target.parentNode.tagName == 'LI') {
-      pressedKey = e.target.parentNode;
-    }
-    if (pressedKey) {
-      pressedKey.classList.add('pressed');
-    }
-  });
-
-  keyboard.addEventListener('mouseup', function (e) {
-    let pressedKey;
-    if (e.target.tagName === 'LI') {
-      pressedKey = e.target;
-    } else if (e.target.parentNode.tagName == 'LI') {
-      pressedKey = e.target.parentNode;
-    }
-    if (pressedKey) {
-      pressedKey.classList.remove('pressed');
-    }
-  });
-};
-
-export const addEventListenersForPhysicalKeyboard = (keyboard, textArea, langStorage) => {
-  document.addEventListener('keydown', function (e) {
-    if (e.target === textArea) {
-      e.preventDefault();
-    }
-    let pressedKeyCode = e.code;
-    let virtualKey = keyboard.querySelector(`li[data-code="${pressedKeyCode}"]`);
-    if (virtualKey) {
-      virtualKey.classList.add('pressed');
-    }
-    processPressedKey(virtualKey, textArea, keyboard, langStorage, e);
-    console.log(e);
-  });
-
-  document.addEventListener('keyup', function (e) {
-    if (e.target === textArea) {
-      e.preventDefault();
-    }
-    let pressedKeyCode = e.code;
-    let virtualKey = keyboard.querySelector(`li[data-code="${pressedKeyCode}"]`);
-    if (virtualKey) {
-      virtualKey.classList.remove('pressed');
-      if (pressedKeyCode != 'CapsLock') {
-        virtualKey.classList.remove('on');
-      }
-      virtualKey.classList.remove('pressed');
-    }
-  });
-};
-
-/*Inner Functions*/
+/* Inner Functions */
 const getSymbolForPrinting = (dataSet, keyboard) => {
   let textForPrint;
   switch (dataSet.code) {
@@ -74,9 +8,9 @@ const getSymbolForPrinting = (dataSet, keyboard) => {
     case 'Tab':
       textForPrint = '\t';
       break;
-    default:
-      let isShiftKeySelected = keyboard.querySelector('.shift.on') != null;
-      let isCapsLockOn = keyboard.querySelector('.capslock.on') != null;
+    default: {
+      const isShiftKeySelected = keyboard.querySelector('.shift.on') != null;
+      const isCapsLockOn = keyboard.querySelector('.capslock.on') != null;
       if (dataSet.additionalText) {
         textForPrint = isShiftKeySelected ? dataSet.additionalText : dataSet.mainText;
       } else {
@@ -87,31 +21,46 @@ const getSymbolForPrinting = (dataSet, keyboard) => {
       } else {
         textForPrint = textForPrint.toLowerCase();
       }
+    }
   }
   return textForPrint;
-}
+};
 
 const unSelectFuncKeys = (keyboard, eventInfo) => {
-  let ctrlKeys = Array.prototype.slice.call(keyboard.querySelectorAll('.control.on'));
+  const ctrlKeys = Array.prototype.slice.call(keyboard.querySelectorAll('.control.on'));
   let shiftKeys = [];
   if (!eventInfo.shiftKey) {
     shiftKeys = Array.prototype.slice.call(keyboard.querySelectorAll('.shift.on'));
   }
-  let altKeys = Array.prototype.slice.call(keyboard.querySelectorAll('.alt.on'));
-  let funcKeys = [];
+  const altKeys = Array.prototype.slice.call(keyboard.querySelectorAll('.alt.on'));
+  const funcKeys = [];
   funcKeys.push(...ctrlKeys, ...shiftKeys, ...altKeys);
-  funcKeys.forEach(key => {
+  funcKeys.forEach((key) => {
     key.classList.remove('on');
-  })
-}
+  });
+};
 
+const removePrevSymbol = (textArea) => {
+  const cursorPosition = textArea.selectionStart;
+  if (cursorPosition > 0) {
+    const text = textArea.value;
+    textArea.value = text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
+  }
+};
+
+const removeNextSymbol = (textArea) => {
+  const cursorPosition = textArea.selectionStart;
+  const text = textArea.value;
+  if (cursorPosition < text.length) {
+    textArea.value = text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
+  }
+};
 
 const processPressedKey = (pressedKey, textArea, keyboard, langStorage, eventInfo) => {
   let currentPosition = textArea.selectionStart;
-  console.log(currentPosition);
   if (pressedKey) {
-    let isCtrlKeySelected = keyboard.querySelector('.control.on') != null;
-    let isShiftKeySelected = keyboard.querySelector('.shift.on') != null;
+    const isCtrlKeySelected = keyboard.querySelector('.control.on') != null;
+    const isShiftKeySelected = keyboard.querySelector('.shift.on') != null;
     switch (pressedKey.dataset.code) {
       case 'ShiftLeft':
       case 'ShiftRight':
@@ -140,7 +89,7 @@ const processPressedKey = (pressedKey, textArea, keyboard, langStorage, eventInf
       case 'Backspace':
         removePrevSymbol(textArea);
         if (currentPosition > 0) {
-          currentPosition--;
+          currentPosition -= 1;
         }
         break;
       case 'Delete':
@@ -148,82 +97,88 @@ const processPressedKey = (pressedKey, textArea, keyboard, langStorage, eventInf
         break;
       case 'ArrowLeft':
         if (currentPosition > 0) {
-          currentPosition--;
+          currentPosition -= 1;
         }
         break;
       case 'ArrowRight':
-        currentPosition++;
-        break;
-      case 'ArrowUp':
-        currentPosition = calcPositionForUpArrow(textArea);
-        break;
-      case 'ArrowDown':
-        currentPosition = calcPositionForDownArrow(textArea);
+        currentPosition += 1;
         break;
       default:
-        textArea.value = textArea.value.substring(0, currentPosition) +
-          getSymbolForPrinting(pressedKey.dataset, keyboard) +
-          textArea.value.substring(currentPosition);
-        currentPosition++;
+        textArea.value = textArea.value.substring(0, currentPosition)
+          + getSymbolForPrinting(pressedKey.dataset, keyboard)
+          + textArea.value.substring(currentPosition);
+        currentPosition += 1;
         unSelectFuncKeys(keyboard, eventInfo);
     }
     textArea.selectionStart = currentPosition;
     textArea.selectionEnd = currentPosition;
     textArea.focus();
-
   }
-}
+};
 
-const calcPositionForUpArrow = (textArea) => {
-  let currentPosition = textArea.selectionStart;
-  if (currentPosition > 0) {
-    let lastSymbolPosition = textArea.value.lastIndexOf('\n', currentPosition - 1);
-    let positionInRow = currentPosition - lastSymbolPosition;
-    let newPosition = textArea.value.lastIndexOf('\n', lastSymbolPosition - 1) + positionInRow;
-    if (newPosition > lastSymbolPosition) {
-      newPosition = lastSymbolPosition;
+/* Inner Functions */
+
+export const addEventListenersForVirtualKeyboard = (keyboard, textArea, keyMap, langStorage) => {
+  keyboard.addEventListener('click', (e) => {
+    let pressedKey;
+    if (e.target.tagName === 'LI') {
+      pressedKey = e.target;
+    } else if (e.target.parentNode.tagName === 'LI') {
+      pressedKey = e.target.parentNode;
     }
-    if (newPosition >= 0) {
-      return newPosition;
+    processPressedKey(pressedKey, textArea, keyboard, langStorage, e);
+  });
+
+  keyboard.addEventListener('mousedown', (e) => {
+    let pressedKey;
+    if (e.target.tagName === 'LI') {
+      pressedKey = e.target;
+    } else if (e.target.parentNode.tagName === 'LI') {
+      pressedKey = e.target.parentNode;
     }
-  }
-  return currentPosition;
-}
-
-const calcPositionForDownArrow = (textArea) => {
-  let currentPosition = textArea.selectionStart;
-  let lastSymbolPosition = textArea.value.indexOf('\n', currentPosition);
-  if (lastSymbolPosition > 0) {
-    let previousLastSymbolPosition = textArea.value.lastIndexOf('\n', currentPosition - 1);
-    let positionInRow = currentPosition - previousLastSymbolPosition;
-    let newPosition = lastSymbolPosition + positionInRow;
-    let nextRowLastSymbolPosition = textArea.value.indexOf('\n', lastSymbolPosition + 1);
-    if (nextRowLastSymbolPosition > textArea.value.length || nextRowLastSymbolPosition === -1) {
-      nextRowLastSymbolPosition = textArea.value.length;
+    if (pressedKey) {
+      pressedKey.classList.add('pressed');
     }
-    if (newPosition > nextRowLastSymbolPosition) {
-      newPosition = nextRowLastSymbolPosition;
+  });
+
+  keyboard.addEventListener('mouseup', (e) => {
+    let pressedKey;
+    if (e.target.tagName === 'LI') {
+      pressedKey = e.target;
+    } else if (e.target.parentNode.tagName === 'LI') {
+      pressedKey = e.target.parentNode;
     }
-    return newPosition;
-  }
-  return currentPosition
-}
+    if (pressedKey) {
+      pressedKey.classList.remove('pressed');
+    }
+  });
+};
 
-const removePrevSymbol = (textArea) => {
-  let cursorPosition = textArea.selectionStart;
-  if (cursorPosition > 0) {
-    let text = textArea.value;
-    textArea.value = text.substring(0, cursorPosition - 1) + text.substring(cursorPosition);
-  }
-}
+export const addEventListenersForPhysicalKeyboard = (keyboard, textArea, langStorage) => {
+  document.addEventListener('keydown', (e) => {
+    if (e.target === textArea) {
+      e.preventDefault();
+    }
+    const pressedKeyCode = e.code;
+    const virtualKey = keyboard.querySelector(`li[data-code="${pressedKeyCode}"]`);
+    if (virtualKey) {
+      virtualKey.classList.add('pressed');
+    }
+    processPressedKey(virtualKey, textArea, keyboard, langStorage, e);
+  });
 
-const removeNextSymbol = (textArea) => {
-  let cursorPosition = textArea.selectionStart;
-  let text = textArea.value;
-  if (cursorPosition < text.length) {
-    textArea.value = text.substring(0, cursorPosition) + text.substring(cursorPosition + 1);
-  }
-}
-
-/*Inner Functions*/
-
+  document.addEventListener('keyup', (e) => {
+    if (e.target === textArea) {
+      e.preventDefault();
+    }
+    const pressedKeyCode = e.code;
+    const virtualKey = keyboard.querySelector(`li[data-code="${pressedKeyCode}"]`);
+    if (virtualKey) {
+      virtualKey.classList.remove('pressed');
+      if (pressedKeyCode !== 'CapsLock') {
+        virtualKey.classList.remove('on');
+      }
+      virtualKey.classList.remove('pressed');
+    }
+  });
+};
