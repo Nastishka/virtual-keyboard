@@ -1,0 +1,133 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  font-size: 10px;
+  font-family: "Roboto", "Arial", sans-serif;
+
+  border: 0;
+}
+
+body {
+  width: 830px;
+  /*min-width: 1020px;*/
+  margin: auto;
+  overflow: scroll;
+}
+
+textarea {
+  display: block;
+  width: calc(100% - 100px);
+  height: 150px;
+  margin: 20px auto;
+  padding: 20px;
+
+  font-size: 1.6rem;
+
+  border: 2px solid grey;
+
+  resize: none;
+}
+
+.keyboard {
+  display: block;
+  width: calc(100% - 100px);
+  margin: 20px auto;
+  padding: 10px;
+
+  list-style-type: none;
+
+  border: 2px solid grey;
+}
+
+.keyboard li {
+  position: relative;
+  display: inline-block;
+  width: 2.7em;
+  height: 2.7em;
+  margin: 0.1em;
+
+  font-size: 1.6rem;
+  line-height: 2.6em;
+  vertical-align: middle;
+  text-align: center;
+
+  border: 2px solid grey;
+  border-radius: 25%;
+  cursor: pointer;
+}
+
+.keyboard li:hover {
+  border-width: 4px;
+}
+
+.keyboard li.pressed {
+  border-color: yellow;
+}
+
+.keyboard li span {
+  display: inline-block;
+}
+
+.keyboard li span.leftTopCornerSymbol {
+  position: absolute;
+  top: -1em;
+  left: 4px;
+}
+
+.keyboard li.shift {
+  width: 5.7em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.control {
+  width: 5.7em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.tab {
+  width: 2.7em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.capslock {
+  width: 5.7em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.backspace {
+  width: 6em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.on {
+  background-color: blue;
+}
+
+.keyboard li.del {
+  width: 3em;
+  border-radius: 25%;
+}
+
+.keyboard li.enter {
+  width: 5.7em;
+  border-radius: 0.5em;
+}
+
+.keyboard li.arrow {
+  width: 2.7em;
+  border-radius: 0.5em;
+  font-weight: bold;
+}
+
+.keyboard li.alt {
+  width: 2.7em;
+  border-radius: 25%;
+}
+
+.keyboard li.space {
+  width: 14.3em;
+  border-radius: 0.5em;
+}
+
