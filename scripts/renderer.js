@@ -21,7 +21,7 @@ export default class Renderer {
 
     const additionalInfo = document.createElement('div');
     additionalInfo.classList.add('additionalInfo');
-    additionalInfo.innerHTML = 'Для переключения на другой язык, используйте сочетание клавиш <kbd>Ctrl</kbd>+<kbd>Shift</kbd> либо <b>ОРАНЖЕВУЮ</b> кнопку виртуальной клавиатуры';
+    additionalInfo.innerHTML = 'Клавиатура разработана на OS Linux Mint. Для переключения на другой язык, используйте сочетание клавиш <kbd>Ctrl</kbd>+<kbd>Shift</kbd> либо <b>ОРАНЖЕВУЮ</b> кнопку виртуальной клавиатуры';
     document.body.appendChild(additionalInfo);
     return this.keyboard;
   }

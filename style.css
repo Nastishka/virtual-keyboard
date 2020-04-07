@@ -49,6 +49,10 @@ textarea {
   color: grey;
 }
 
+.additionalInfo::first-line {
+  text-align: justify;
+}
+
 .additionalInfo b {
   font-size: 1.6rem;
   color: orange;
