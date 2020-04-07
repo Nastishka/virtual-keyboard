@@ -18,11 +18,20 @@ export class Renderer {
     this.keyboard.classList.add('keyboard');
     this.renderKeyBoard(this.langStorage.getLang());
     document.body.appendChild(this.keyboard);
+
+    let additionalInfo = document.createElement('div');
+    additionalInfo.classList.add('additionalInfo');
+    additionalInfo.innerHTML = "Для переключения на другой язык, используйте сочетание клавиш <kbd>Ctrl</kbd>+<kbd>Shift</kbd> либо <b>ОРАНЖЕВУЮ</b> кнопку виртуальной клавиатуры";
+    document.body.appendChild(additionalInfo);
     return this.keyboard;
   }
 
-  renderKeyBoard(locale){
+  renderKeyBoard(locale) {
     let isCapsLockKeySelected = this.keyboard.querySelector('.capslock.on') != null;
+    let pressedKeys = Array.from(
+      this.keyboard.querySelectorAll('.pressed'),
+      item => item.dataset.code
+    );
     this.keyboard.innerHTML = '';
     this.keyMap.forEach(row => {
       row.forEach(keyInfo => {
@@ -31,6 +40,9 @@ export class Renderer {
         key.innerText = mainText;
         key.dataset.mainText = mainText;
         key.dataset.code = keyInfo.code;
+        if (pressedKeys.indexOf(key.dataset.code) > -1) {
+          key.classList.add('pressed');
+        }
         if (keyInfo.additionalCssClasses && keyInfo.additionalCssClasses.length > 0) {
           key.classList.add(keyInfo.additionalCssClasses);
         }

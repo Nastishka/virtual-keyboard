@@ -11,7 +11,6 @@
 
 body {
   width: 830px;
-  /*min-width: 1020px;*/
   margin: auto;
   overflow: scroll;
 }
@@ -41,8 +40,23 @@ textarea {
   border: 2px solid grey;
 }
 
+.additionalInfo {
+  width: calc(100% - 100px);
+  margin: 20px auto;
+
+  font-size: 1.2rem;
+  text-align: right;
+  color: grey;
+}
+
+.additionalInfo b {
+  font-size: 1.6rem;
+  color: orange;
+}
+
 .keyboard li {
   position: relative;
+
   display: inline-block;
   width: 2.7em;
   height: 2.7em;
@@ -56,6 +70,8 @@ textarea {
   border: 2px solid grey;
   border-radius: 25%;
   cursor: pointer;
+
+  transition: border-width, border-color, background-color 0.5s linear;
 }
 
 .keyboard li:hover {
@@ -63,7 +79,14 @@ textarea {
 }
 
 .keyboard li.pressed {
-  border-color: yellow;
+  animation: press 1s ease forwards;
+}
+
+@keyframes press {
+  to {
+    border-width: 4px;
+    border-color: yellow;
+  }
 }
 
 .keyboard li span {
@@ -78,56 +101,70 @@ textarea {
 
 .keyboard li.shift {
   width: 5.7em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.control {
   width: 5.7em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.tab {
   width: 2.7em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.capslock {
   width: 5.7em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.backspace {
   width: 6em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.on {
-  background-color: blue;
+  background-color: rgb(0, 255, 221);
 }
 
 .keyboard li.del {
   width: 3em;
+
   border-radius: 25%;
 }
 
 .keyboard li.enter {
   width: 5.7em;
+
   border-radius: 0.5em;
 }
 
 .keyboard li.arrow {
   width: 2.7em;
-  border-radius: 0.5em;
+
   font-weight: bold;
+
+  border-radius: 0.5em;
 }
 
 .keyboard li.alt {
   width: 2.7em;
+
   border-radius: 25%;
+}
+
+.keyboard li.lang {
+  background-color: orange;
 }
 
 .keyboard li.space {
   width: 14.3em;
+
   border-radius: 0.5em;
 }
-

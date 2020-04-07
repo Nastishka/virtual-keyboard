@@ -12,12 +12,12 @@ export class LangSessionStorage {
   getLang() {
     return sessionStorage.getItem('vkb_lang') || this.languages[0];
   }
-  toggleLang(){
+  toggleLang() {
     let currentLang = this.getLang();
     let newLangIndex = (this.languages.indexOf(currentLang) + 1) % this.languages.length;
     this.setLang(this.languages[newLangIndex]);
   }
-  setChangeLangCallback(callback){
+  setChangeLangCallback(callback) {
     this.onLangChangeCallback = callback;
   }
 }

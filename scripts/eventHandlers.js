@@ -7,8 +7,6 @@ export const addEventListenersForVirtualKeyboard = (keyboard, textArea, keyMap, 
       pressedKey = e.target.parentNode;
     }
     processPressedKey(pressedKey, textArea, keyboard, langStorage, e);
-    console.log(e.target);
-    console.log(e);
   });
 
   keyboard.addEventListener('mousedown', function (e) {
@@ -20,6 +18,18 @@ export const addEventListenersForVirtualKeyboard = (keyboard, textArea, keyMap, 
     }
     if (pressedKey) {
       pressedKey.classList.add('pressed');
+    }
+  });
+
+  keyboard.addEventListener('mouseup', function (e) {
+    let pressedKey;
+    if (e.target.tagName === 'LI') {
+      pressedKey = e.target;
+    } else if (e.target.parentNode.tagName == 'LI') {
+      pressedKey = e.target.parentNode;
+    }
+    if (pressedKey) {
+      pressedKey.classList.remove('pressed');
     }
   });
 };
@@ -49,6 +59,7 @@ export const addEventListenersForPhysicalKeyboard = (keyboard, textArea, langSto
       if (pressedKeyCode != 'CapsLock') {
         virtualKey.classList.remove('on');
       }
+      virtualKey.classList.remove('pressed');
     }
   });
 };
@@ -94,23 +105,27 @@ const unSelectFuncKeys = (keyboard, eventInfo) => {
   })
 }
 
+
 const processPressedKey = (pressedKey, textArea, keyboard, langStorage, eventInfo) => {
   let currentPosition = textArea.selectionStart;
   console.log(currentPosition);
   if (pressedKey) {
     let isCtrlKeySelected = keyboard.querySelector('.control.on') != null;
+    let isShiftKeySelected = keyboard.querySelector('.shift.on') != null;
     switch (pressedKey.dataset.code) {
       case 'ShiftLeft':
       case 'ShiftRight':
         pressedKey.classList.toggle('on');
         if (isCtrlKeySelected) {
           langStorage.toggleLang();
-          unSelectFuncKeys(keyboard, eventInfo);
         }
         break;
       case 'ControlLeft':
       case 'ControlRight':
         pressedKey.classList.toggle('on');
+        if (isShiftKeySelected) {
+          langStorage.toggleLang();
+        }
         break;
       case 'CapsLock':
         pressedKey.classList.toggle('on');
@@ -152,7 +167,6 @@ const processPressedKey = (pressedKey, textArea, keyboard, langStorage, eventInf
         currentPosition++;
         unSelectFuncKeys(keyboard, eventInfo);
     }
-    pressedKey.classList.remove('pressed');
     textArea.selectionStart = currentPosition;
     textArea.selectionEnd = currentPosition;
     textArea.focus();
