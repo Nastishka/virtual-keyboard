@@ -1,0 +1,201 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+
+  font-size: 10px;
+  font-family: "Roboto", "Arial", sans-serif;
+
+  border: 0;
+}
+
+body {
+  width: 830px;
+  margin: auto;
+  overflow: scroll;
+}
+
+textarea {
+  display: block;
+  width: calc(100% - 100px);
+  height: 150px;
+  margin: 20px auto;
+  padding: 20px;
+
+  font-size: 1.6rem;
+
+  border: 2px solid grey;
+
+  resize: none;
+}
+
+.keyboard {
+  display: block;
+  width: calc(100% - 100px);
+  margin: 20px auto;
+  padding: 10px;
+
+  list-style-type: none;
+
+  border: 2px solid grey;
+}
+
+.additionalInfo {
+  width: calc(100% - 100px);
+  margin: 20px auto;
+
+  font-size: 1.2rem;
+  text-align: right;
+  color: grey;
+}
+
+.additionalInfo::first-line {
+  text-align: justify;
+}
+
+.additionalInfo b {
+  font-size: 1.6rem;
+  color: orange;
+}
+
+.keyboard li {
+  position: relative;
+  z-index: 0;
+
+  display: inline-block;
+  width: 2.7em;
+  height: 2.7em;
+  margin: 0.1em;
+  padding: 2px;
+  overflow: hidden;
+
+  font-size: 1.6rem;
+  line-height: 2.6em;
+  vertical-align: middle;
+  text-align: center;
+
+  border: 2px solid grey;
+  border-radius: 10px;
+  cursor: pointer;
+
+  transition: border-width 0.5s linear;
+}
+
+.keyboard li:hover {
+  border-width: 4px;
+  border-color: #fbb300;
+}
+
+.keyboard li.pressed {
+  background-color: rgb(0, 255, 221);
+  border-width: 0;
+}
+
+.keyboard li::before,
+.keyboard li::after {
+  box-sizing: border-box;
+}
+
+@keyframes press {
+  100% {
+    transform: rotate(1turn);
+  }
+}
+
+.keyboard li.pressed::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  z-index: -2;
+
+  width: 200%;
+  height: 200%;
+
+  background-color: #399953;
+  background-image: linear-gradient(#399953, #399953), linear-gradient(#fbb300, #fbb300), linear-gradient(#d53e33, #d53e33), linear-gradient(#377af5, #377af5);
+  background-repeat: no-repeat;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-size: 50% 50%, 50% 50%;
+
+  animation: press 5s linear infinite;
+}
+
+.keyboard li.pressed::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: -1;
+
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
+
+  background: white;
+  border-radius: 10px;
+}
+
+.keyboard li span {
+  display: inline-block;
+}
+
+.keyboard li span.leftTopCornerSymbol {
+  position: absolute;
+  top: -1em;
+  left: 4px;
+}
+
+.keyboard li.shift {
+  width: 5.7em;
+}
+
+.keyboard li.control {
+  width: 5.7em;
+}
+
+.keyboard li.tab {
+  width: 2.7em;
+}
+
+.keyboard li.capslock {
+  width: 5.7em;
+}
+
+.keyboard li.backspace {
+  width: 6em;
+}
+
+.keyboard li.on {
+  background-color: rgb(0, 255, 221);
+}
+
+.keyboard li.del {
+  width: 3em;
+}
+
+.keyboard li.enter {
+  width: 5.7em;
+}
+
+.keyboard li.arrow {
+  width: 2.7em;
+
+  font-weight: bold;
+}
+
+.keyboard li.alt {
+  width: 2.7em;
+}
+
+.keyboard li.lang {
+  background-color: orange;
+}
+
+.keyboard li.lang:hover {
+  background-color: orange;
+  border-color: grey;
+}
+
+.keyboard li.space {
+  width: 14.3em;
+}
